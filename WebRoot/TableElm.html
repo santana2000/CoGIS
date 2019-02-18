@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Interactive web map for CSULB Trees dataset</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Interactive web map for CSULB Trees dataset</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+a:link {
+    color: green;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: coral;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+  </style>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.3/"></script>
+  <script>
+    var searchResults;
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/geometry/Extent",
+      "esri/renderers/SimpleRenderer",
+      "esri/symbols/PictureMarkerSymbol",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Search",
+      "esri/widgets/Legend",
+      "esri/widgets/ScaleBar",
+      "esri/widgets/Home",
+      "dojo/domReady!"
+    ], function(Map, MapView,
+      Extent, SimpleRenderer,
+      PictureMarkerSymbol,
+      FeatureLayer, Search,
+      Legend, ScaleBar, Home) {
+
+      var map = new Map({
+        basemap: "gray"
+      });
+
+      var initialExtent = new Extent({
+        xmin: -118.13,
+        xmax: -118.1,
+        ymin: 33.77,
+        ymax: 33.79
+        //spatialReference: 102100
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        zoom: 15,
+        center: [-118.114090, 33.783823],
+        extent: initialExtent
+      });
+
+      var treeRenderer = new SimpleRenderer({
+        symbol: new PictureMarkerSymbol({
+          url: "http://www.clker.com/cliparts/e/d/8/f/1206581914343605633nicubunu_RPG_map_symbols_tree_8.svg.hi.png",
+          width: 9,
+          height: 9,
+          angle: 0
+        })
+      });
+      
+      
+      var template = {
+        title: "CSULB Tree ID: {objectid}",
+        content: "<li>Common name: <b>{common_name}</b></li>" +
+          "<li>Scientific name: <b>{scientific_name}</b></li>" +
+          "<li>Genus: <b>{genus}</b> </li>" +
+          "<li>Specific epithet: <b>{specific_epithet}</b></li>"+
+          "<li>Cultivar subspecies: <b>{cultivar_subspecies}</b> </li>"+
+          "<li>Family: <b>{family}</b> </li>"+
+          "<li>Condition: <b>{condition}</b> </li>"+
+          "<li>Average of Trunk dbt: <b>{average_trunk_dbh_cm}</b></li>"+
+          "<li>Height: <b>{hight_m}</b> Meter</li>"+
+          "<li>Canopy height: <b>{canopy_height_m}</b> Meter</li>"+
+          "<li>Canopy width: <b>{canopy_width_m}</b> Meter</li>"+
+          "<li>Canopy shape: <b>{canopy_shape}</b> Meter</li>"+
+          "<li>Biomass Mt: <b>{biomass_mt}</b></li>"+
+          "<li>Co2 sequestration: <b>{co2_sequestration_kg}</b> Kg</li>"+
+          "<li>Owner: <b>{owner}</b> </li>"+
+          "<li>Photo: <b>{photo_urls}</b> Meter</li>"+
+          "<li>Date planted: <b>{date_planted}</b> </li>",
+
+        fieldInfos: [{
+          fieldName: "canopy_width_m",
+          format: {
+            digitSeparator: true, // Use a comma separator for large numbers
+            places: 0 // Sets the number of decimal places to 0 and rounds up
+          }
+        }, {
+          fieldName: "average_trunk_dbh_cm",
+          format: {
+            digitSeparator: true,
+            places: 0 }, 
+        }]
+      };
+      
+      
+      
+      
+      
+      
+
+      var campus = new FeatureLayer({
+        url: "http://services3.arcgis.com/vq5vGR4r1YX7ueLg/arcgis/rest/services/CampusTreeLayers/FeatureServer/1?token=R1VkseUaX5VeH-vBErTZrlB5cmP-sbvkiphjqt_QYJa6Vf2-5vtfczfMBZGc9qO2yu4lq1UclgeUo2fwnCytdDGlO658prv_BClf2E9tQaUuF8kfOJmsz66WSPyMn93DUz11f_gLn7O8EbtItskZPytYN6Q6LSzQ6Z2oYc6va9o8TjRcFgQRfMYT9VPjzKjBwIFMzhVpZw57KldjDdiNHAX4g2EvQ3-vJTBBZdVJ7H0."
+      });
+      map.add(campus);
+
+      var tree = new FeatureLayer({
+        url: "http://services3.arcgis.com/vq5vGR4r1YX7ueLg/arcgis/rest/services/CampusTreeLayers/FeatureServer/0?token=R1VkseUaX5VeH-vBErTZrlB5cmP-sbvkiphjqt_QYJa6Vf2-5vtfczfMBZGc9qO2yu4lq1UclgeUo2fwnCytdDGlO658prv_BClf2E9tQaUuF8kfOJmsz66WSPyMn93DUz11f_gLn7O8EbtItskZPytYN6Q6LSzQ6Z2oYc6va9o8TjRcFgQRfMYT9VPjzKjBwIFMzhVpZw57KldjDdiNHAX4g2EvQ3-vJTBBZdVJ7H0.",
+        outFields: ["*"],
+        popupTemplate: template,
+        renderer: treeRenderer
+      });
+      map.add(tree);
+
+      var search = new Search({
+        view: view,
+
+        sources: [{
+          autoselect: false,
+          popupOpenOnSelect: false,
+          featureLayer: tree,
+          searchFields: ["objectid", "common_name"],
+          displayField: "objectid",
+          exactMatch: false,
+          outFields: ["objectid", "common_name"],
+          name: "Tree FS",
+          placeholder: "Object ID or Tree Name",
+          maxResults: 6,
+          maxSuggestions: 6,
+          minSuggestCharacters: 1
+        }]
+      });
+      view.ui.add(search, "top-right");
+
+      search.viewModel.on("search-complete", function(event) {
+        searchResults = event.results[0].results;
+
+        document.getElementById('title').style.visibility = "visible";
+        pagenum = searchResults.length / 20;
+        if(!Number.isInteger(pagenum)){
+          pagenum++;
+        }
+        pagehtml = "";
+        for (x = 1; x <= pagenum; x++) {
+          pagehtml += "<a id='page" + x +"' href='#' style='margin-right:5px;  border: 1px solid #ddd; float: center; padding: 3px 8px; text-decoration: none; transition: background-color .3s;  ' onClick='gotoresultspage(this.innerHTML)'>" + x + "</a>";
+        }
+        pagehtml += "<div id='resultstable'></div>";
+
+        document.getElementById('title').innerHTML = pagehtml;
+        gotopage = 1;
+        gotoresultspage(gotopage);
+        
+        //how to click each result in table "for example: pine" and view the popup?
+        
+        TableElm =event.results[0].results[0];
+        for (x=0; x<=searchResults; X++ ){
+          TableElm +="<a id='TElm" + x +"' href='#'  onClick=' gotopopup(GoPop)'>" + x + "</a>";
+        }
+
+        
+      });
+      
+        function gotopopup(GoPop) {
+     document.getElementById("title").innerHTML = template;
+  
+}
+      
+      var legend = new Legend({
+        view: view,
+      });
+      view.ui.add(legend, "bottom-left");
+
+      var scaleBar = new ScaleBar({
+        view: view,
+        unit: "non-metric"
+      });
+      view.ui.add(scaleBar, {
+        position: "bottom-left"
+      });
+
+      var homeBtn = new Home({
+        view: view
+      });
+      view.ui.add(homeBtn, "top-left");
+
+    });
+
+    function gotoresultspage(gotopage) {
+      var table = document.getElementById("resultstable");
+      var tableCode = "<table style='width:100%'>";
+      var en = gotopage * 10, bn = en - 10;
+      for (x = bn; x < en; x++){
+        if(!searchResults[x]){
+          objid = commonname = " "
+        }else{
+          commonname = searchResults[x].feature.attributes.common_name;
+          objid = searchResults[x].name;
+        }
+        tableCode += "<tr><td>" + objid + "</td><td>" + commonname + "</td></tr>";
+      }
+      tableCode += "</table>";
+      table.innerHTML = tableCode;
+    }
+    
+  
+    
+  </script>
+</head>
+
+<body>
+  <div id="title" style="visibility:hidden; font-family: Helvetica, Arial, sans-serif; margin-left:auto; margin-right:auto; position:absolute; top: 50px; right: 16px; padding: 30px; z-index:10; width:290px; height:500px; box-sizing: border-box;  background-color:#fcfcfc ; -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); text-align:center; float:center;"></div>
+  <div id="viewDiv"></div>
+   <div  onclick="gotopopup()" id="myPopup" ></div>
+</body>
+

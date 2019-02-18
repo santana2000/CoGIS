@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Get started with MapView - Create a 2D map</title>
+    <style>
+  html, body, #viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+  }
+</style>
+    <link rel="stylesheet" href="http://localhost:8080/arcgis_js_api/library/4.0/4.0/esri/css/main.css">
+    <script src="http://localhost:8080/arcgis_js_api/library/4.0/4.0/init.js"></script>
+    <script>
+        require( [
+          "esri/Map",
+          "esri/views/MapView",
+          "esri/widgets/Home",
+          "esri/core/watchUtils",
+          "dojox/socket",
+          "dojo/domReady!"
+        ], function ( Map, MapView, Home, watchUtils,Socket )
+        {
+            var map = new Map( {
+                basemap: "streets"
+            } );
+            var view = new MapView( {
+                container: "viewDiv",  // Reference to the scene div created in step 5
+                map: map,  // Reference to the map object created before the scene
+                zoom: 4,  // Sets the zoom level based on level of detail (LOD)
+                center: [118, 35]  // Sets the center point of view in lon/lat
+            } );
+            var homeBtn = new Home( {
+                view: view
+            }, "homeDiv" );
+            homeBtn.startup();
+            view.ui.add( homeBtn, "top-left" );
+
+            //view.on( "layerview-create", function ( event )
+            //{
+            //    alert( "视图开始创建！" );
+            //} );
+            //view.then( function ()
+            //{
+            //    alert( "promise开始执行！" );
+            //}, function ( error )
+            //{
+            //    alert( "promise执行出错！" );
+            //} );
+
+            //view.on( "click", function ( evt )
+            //{
+            //    alert( "鼠标单击！" );
+            //} );
+
+            watchUtils.watch( view, ["extent",  "center"], function ( watchHandle )
+            {
+                /*
+                console.log( "中心纬度：" + view.center.latitude + "\r\n"
+                    + "中心经度：" + view.center.longitude + "\r\n"
+                    + "xmin：" + view.extent.xmin + "\r\n"
+                    + "ymin：" + view.extent.ymin + "\r\n"
+                    + "xmax：" + view.extent.xmax + "\r\n"
+                    + "ymax：" + view.extent.ymax + "\r\n"
+                    + "坐标参考：" + view.extent.spatialReference.wkid + "\r\n"
+                    );
+                 */
+
+
+            } );
+
+            //watchUtils.watch( view, "center", function ( watchHandle )
+            //{
+
+            //    alert( "center发生变化！" );
+            //} );
+
+            var url = "ws://" + window.location.hostname + ":" + window.location.port + "/CoHandler.ashx";
+            //var url = "/CoHandler.ashx";
+            //var url = "/Handler2.ashx";
+            console.log( url );
+            var socket = new WebSocket( url );
+           
+            socket.on( "open", function ( event )
+            {
+                //console.log( "已经建立websocket连接！" );
+                socket.send( "hi server" );
+            } );
+
+            socket.on( "message", function ( event )
+            {
+               // console.log( "收到server端消息！" );
+                console.log( event.data );
+            } );
+        } );
+    </script>
+</head>
+<body>
+    <div id="viewDiv"></div>
+</body>
+</html>

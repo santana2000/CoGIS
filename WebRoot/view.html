@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prototype System</title>
+    <link href="https://cdn.bootcss.com/normalize/8.0.1/normalize.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.10/"></script>
+    <!--<link rel="stylesheet" href="main.css">-->
+
+    <script src="main.js"></script>
+
+    <style>
+        html,body{
+            border: rgba(231, 234, 237, 0.56) 2px solid;
+        }
+
+        div{
+            box-sizing: border-box;
+        }
+
+        .clearx:after{
+            display:block;
+            clear:both;
+            content:"";
+            visibility:hidden;
+            height:0
+        }
+        p{
+            font-size: 30px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+        .header{
+            background-color: #ffffff;
+        }
+        .name{
+            /*text-align: center;*/
+            margin: 0 0 0 0;
+            padding: 0 10px;
+            border: #000000 1px solid;
+            color: rgba(41, 41, 41, 0.85);
+            font-family: "Eras Medium ITC";
+            font-style:italic;
+            background-color: rgba(83, 53, 22, 0.42)
+
+        }
+        h1{
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .func{
+            padding: 2px 3px;
+            margin-right: 10px;
+            background-color: rgba(230, 240, 213, 0.78);
+
+            border-radius: 2px;
+        }
+        .first{
+            margin-left: 10px;
+        }
+        .type,
+        .menu{
+            /*border: #000000 1px solid;*/
+
+        }
+        .lview,
+        .rview{
+            text-align: center;
+            border: #000000 1px solid;
+            /*box-sizing: border-box;*/
+            padding: 3px 0;
+
+
+        }
+        .lview{
+            float: left;
+            width: 43%;
+
+        }
+        .rview{
+            float: right;
+            width: 57%;
+            padding-right: 230px;
+
+        }
+
+        .lmenu,
+        .rmenu{
+            width: 43%;
+            border: #000000 1px solid;
+            padding: 3px 0;
+
+            /*box-sizing: border-box;*/
+        }
+
+
+        .lmenu{
+            float: left;
+        }
+        .menu{
+            font-size: 16px;
+
+        }
+        .next{
+            list-style: none;
+            display: none;
+            z-index: 2;
+
+        }
+        .func{
+            display: inline-block;
+            position: relative;
+        }
+        .func:hover .next{
+            display: block;
+            background-color: rgba(180, 174, 175, 0.27);
+            box-shadow: white;
+            border-radius: 4px;
+            position: absolute;
+            top: 10px;
+            padding: 10px 10px;
+
+        }
+        li{
+            padding: 3px;
+            text-align: center;
+        }
+        .rmenu{
+            float: right;
+            width: 57%;
+
+
+        }
+        .maps{
+            background-color: #ffffff;
+            /*border: #000000 1px solid;*/
+        }
+
+        #lmap,
+        #rmap,
+        .side{
+            border: #000000 1px solid;
+        }
+        #lmap{
+            width: 43%;
+            height: 500px;
+            /*background-color: cadetblue;*/
+            float: left;
+        }
+        #rmap{
+            width: 43%;
+            /*background-color: #f6cf98;*/
+            float: left;
+            height: 500px;
+
+
+        }
+        .side{
+            width: 14%;
+            float: right;
+            height: 500px;
+            font-size: 15px;
+        }
+        .message{
+            /*border: #000000 1px solid;*/
+        }
+        .user{
+            border: #000000 1px solid;
+            float: left;
+            width: 20%;
+            height: 100px;
+            font-size: 15px;
+
+        }
+        .send{
+            border: #000000 1px solid;
+            float: left;
+            width: 50%;
+            height: 100px;
+
+
+        }
+        .mes{
+            border: #000000 1px solid;
+            float: left;
+            width: 50%;
+            height: 100px;
+            font-size: 15px;
+
+
+        }
+        textarea{
+            width: 99%;
+            display: block;
+            height: 65px;
+        }
+        input{
+            display: inline-block;
+            width: 90%;
+            box-sizing: border-box;
+
+        }
+        button{
+            display: inline-block;
+            width: 10%;
+            /*border: 1px black solid;*/
+            box-sizing: border-box;
+            padding: 1px 0;
+
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="name">
+            <p>Muti-view Real-time Collaborative GIS</p>
+        </div>
+        <div class="type clearx">
+            <div class="lview">Public View</div>
+            <div class="rview">Private View</div>
+        </div>
+    </div>
+    <div class="menu clearx">
+        <div class="lmenu">
+            <span class="func first" >Public View to Private View</span>
+            <span class="func">Basic Operation
+                <ul class="next">
+                    <li>Zoom In</li>
+                    <li>Zoom Out</li>
+                    <li>Pan</li>
+                    <li>ViewEntire</li>
+                </ul>
+            </span>
+            <span class="func">Spatial Query</span>
+        </div>
+        <div class="rmenu">
+            <span class="func first">Private View to Public View</span>
+            <span class="func">Map Annotation</span>
+
+            <span class="func">Spatial Query</span>
+            <span class="func">Spatial Analysis</span>
+            <span class="func">Map Edit</span>
+        </div>
+    </div>
+    <div class="maps clearx">
+        <div id="lmap"> </div>
+        <div id="rmap"> </div>
+        <div class="side">Users Online:
+            <br>
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  —— Client:A
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  —— Client:B
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  —— Client:C
+        </div>
+    </div>
+    <div class="message clearx">
+        <!--<div class="user">-->
+            <!--Users Online：<br>客户端0<br>客户端1<br>-->
+        <!--</div>-->
+        <div class="send">
+            <textarea style="font-size: 15px">Real-time session:</textarea>
+            <input><button>send </button>
+        </div>
+        <div class="mes">Instant Message:<br></div>
+    </div>
+</div>
+</body>
+</html>

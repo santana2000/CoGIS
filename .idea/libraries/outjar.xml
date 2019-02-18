@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="outjar">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/outjar/servlet-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/outjar/tomcat-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/outjar/tomcat-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/outjar/tomcat-websocket.jar!/" />
+      <root url="jar://$PROJECT_DIR$/outjar/catalina.jar!/" />
+      <root url="jar://$PROJECT_DIR$/outjar/websocket-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/outjar/tomcat-coyote.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
