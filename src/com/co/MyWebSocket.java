@@ -9,6 +9,9 @@ import javax.websocket.server.*;
 
 import org.apache.catalina.*;
 
+// @ServerEndpoint 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端,
+// 注解的值将被用于监听用户连接的终端访问URL地址,客户端可以通过这个URL来连接到WebSocket服务器端
+// 注解使得此Java类声明成WebSocket的端点
 @ServerEndpoint("/websocket")
 public class MyWebSocket{
 
@@ -18,7 +21,10 @@ public class MyWebSocket{
 	private String currentUserID;
 	//记录消息
 	private String msg;
-	//concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
+
+	//concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
+    //若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
+    //存放websocket客户端的集合
 	private static CopyOnWriteArraySet<MyWebSocket> webSocketSet=new CopyOnWriteArraySet<MyWebSocket>();
 
 	//与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -31,7 +37,9 @@ public class MyWebSocket{
 	@OnOpen
 	public void onOpen(Session session){
 		this.session = session;
-		webSocketSet.add(this);     //加入set中
+        this.currentUserID=session.getId();
+
+        webSocketSet.add(this);     //加入set中
 		addOnlineCount();           //在线数加1
 		System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
 	}
@@ -53,20 +61,16 @@ public class MyWebSocket{
 	 */
 	@OnMessage
 	public void onMessage(String message, Session session) {
-		String ID=session.getId();
+//		String ID=session.getId();
 		this.currentUserID=session.getId();
         this.msg=message;
-		//群发消息
+		//群发消息----广播
 		for(MyWebSocket item: webSocketSet){             
-			try {	
-				//if(item.msg!=message){	
-				//	 item.msg=message;	 
-					//if(item.currentUserID !=ID){
-						System.out.println("来自客户端" +currentUserID+"的消息:"+ message.toString()+"发送给客户端" +item.currentUserID);
-						item.sendMessage(message);
-					//}
-				//}
-				//else{}
+			try {
+//			    String usermsg = "来自客户端" +currentUserID+"的消息:"+ msg.toString()+"发送给客户端" +item.currentUserID;
+			    System.out.println("来自客户端" +currentUserID+"的消息:"+ msg.toString()+"发送给客户端" +item.currentUserID);
+			    item.sendMessage(message);
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				continue;

@@ -240,13 +240,11 @@
 	<div id="coviewDiv" class="view"></div>
 
 	<div id="coSettingsDiv">
-		<input id="coChB" type="checkbox" checked="checked"> <span>协同开关</span>&nbsp;
+		<input id="coChB" type="checkbox" > <span>协同开关</span>&nbsp;
 	</div>
     <div id="dismessage">
         来自客户端3的消息:
-
     </div>
-
 
 </body>
 </html>

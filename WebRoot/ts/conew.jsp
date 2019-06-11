@@ -9,16 +9,10 @@
 <head>
     <meta charset="UTF-8">
     <base href="<%=basePath%>">
-
     <title>Prototype System</title>
-
     <link href="https://cdn.bootcss.com/normalize/8.0.1/normalize.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
     <script src="https://js.arcgis.com/4.3/"></script>
-    <!--<link rel="stylesheet" href="main.css">-->
-
-    <%--<script src="main.js"></script>--%>
 
     <style>
         html,body{
@@ -241,7 +235,7 @@
             "dojo/dom-construct",
             "dojox/socket",
             "dojo/json",
-            "dojo/domReady!"
+            "dojo/domReady!conew"
         ], function(Map, MapView, Home, watchUtils, on, dom, domConstruct, Socket, Json) {
 
             // var coCheckBox = dom.byId("coChB");
@@ -288,9 +282,9 @@
             //{
             //    alert( "鼠标单击！" );
             //} );
+
 //===============================================================================
             var url = "ws://localhost:8080/websocket";
-            //console.log(url);
             var websocket = null;
 
             //判断当前浏览器是否支持WebSocket
@@ -345,14 +339,16 @@
                         obj.coRotation = view.rotation;
 
                         var message = Json.stringify(obj);
-
                         send(message);
-                        //console.log(message);
+
                     }
 
                 });
 
             //2. 接收到消息的回调方法
+            //   event是地理事件还是键鼠事件               ？？？？？？？？？？
+            //   还是pausableWatchHandle就是一个事件 ？？？？？？？？？？？？？
+            //   ------事件监听(websocket默认这么写)--------
             websocket.onmessage = function(event) {
                 setMessage(event.data);
 
@@ -360,14 +356,14 @@
             //3. 将消息显示在网页上，解析封装好的消息，将消息内容应用到协同视图中
             function setMessage(data) {
                 var obj = Json.parse(data);
-                //console.log(obj);
+                console.log(obj);
 
-                var p2 = document.createTextNode(data);
+                var p = document.createTextNode(data);
                 var br = document.createElement('br');
 
 
 
-                document.getElementById('mes').appendChild(p2);
+                document.getElementById('mes').appendChild(p);
                 document.getElementById('mes').appendChild(br);
                 console.log(document.getElementById('mes').value);
 
